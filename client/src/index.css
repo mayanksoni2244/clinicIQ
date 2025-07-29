@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+.tx{
+    -webkit-text-stroke: 1px rgb(15, 70, 24)
+}
+.tp{
+    -webkit-text-stroke: 1px rgb(255, 255, 255);
+}
