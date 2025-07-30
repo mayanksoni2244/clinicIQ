@@ -10,6 +10,8 @@ const DoctorSignup = () => {
     password: "",
     specialization: "",
     medicalId: "",
+    experienceYears: "",
+    degree: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -23,6 +25,7 @@ const DoctorSignup = () => {
     try {
       const res = await API.post("/auth/register", {
         ...form,
+        experienceYears: Number(form.experienceYears),
         role: "doctor",
       });
       if (res.status === 201) {
@@ -83,6 +86,24 @@ const DoctorSignup = () => {
             required
             className="w-full border px-4 py-2 rounded"
             value={form.medicalId}
+            onChange={handleChange}
+          />
+          <input
+            type="number"
+            name="experienceYears"
+            placeholder="Years of Experience"
+            required
+            className="w-full border px-4 py-2 rounded"
+            value={form.experienceYears}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="degree"
+            placeholder="Highest Degree (e.g., MBBS, MD)"
+            required
+            className="w-full border px-4 py-2 rounded"
+            value={form.degree}
             onChange={handleChange}
           />
           <button type="submit" className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition" disabled={loading}>
