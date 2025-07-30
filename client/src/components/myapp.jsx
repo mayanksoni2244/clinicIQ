@@ -58,6 +58,9 @@ const MyAppointments = () => {
               <p><strong>Doctor:</strong> {appt.doctor?.name || 'N/A'}</p>
               <p><strong>Date:</strong> {new Date(appt.date).toLocaleDateString()}</p>
               <p><strong>Time:</strong> {appt.timeSlot}</p>
+              {appt.tokenNumber && (
+                <p><strong>Token #:</strong> {appt.tokenNumber}</p>
+              )}
               <p><strong>Status:</strong> {appt.status || 'pending'}</p>
               {appt.status === 'pending' && (
                 <button

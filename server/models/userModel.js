@@ -39,6 +39,14 @@ const userSchema = new mongoose.Schema({
   testimonial: {
     type: String,
   },
+  availableStart: {
+    type: String,
+    required: function() { return this.role === 'doctor'; },
+  },
+  availableEnd: {
+    type: String,
+    required: function() { return this.role === 'doctor'; },
+  },
 });
 
 export const User = mongoose.model("User", userSchema);

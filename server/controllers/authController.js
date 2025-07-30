@@ -4,15 +4,15 @@ import { User } from "../models/userModel.js";
 import { generateToken } from "../utils/generatetoken.js";
 
 export const register = async (req, res) => {
-  const { name, email, password, role, specialization, medicalId, experienceYears, degree } = req.body;
+  const { name, email, password, role, specialization, medicalId, experienceYears, degree, availableStart, availableEnd } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser)
       return res.status(400).json({ message: "User already exists" });
 
-    if (role === "doctor" && (!specialization || !medicalId || !experienceYears || !degree)) {
-      return res.status(400).json({ message: "Specialization, Medical ID, Degree and Experience are required for doctors" });
+    if (role === "doctor" && (!specialization || !medicalId || !experienceYears || !degree || !availableStart || !availableEnd)) {
+      return res.status(400).json({ message: "Specialization, Medical ID, Degree, Experience and Availability are required for doctors" });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -28,7 +28,7 @@ export const register = async (req, res) => {
       email,
       password: hashedPassword,
       role,
-      ...(role === "doctor" ? { specialization, medicalId, experienceYears, degree, testimonial: testimonialText } : {}),
+      ...(role === "doctor" ? { specialization, medicalId, experienceYears, degree, testimonial: testimonialText, availableStart, availableEnd } : {}),
     });
     await newUser.save();
 
@@ -46,6 +46,8 @@ export const register = async (req, res) => {
         experienceYears: newUser.experienceYears,
         degree: newUser.degree,
         testimonial: newUser.testimonial,
+        availableStart: newUser.availableStart,
+        availableEnd: newUser.availableEnd,
         token,
       },
     });

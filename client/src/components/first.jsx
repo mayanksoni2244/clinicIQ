@@ -20,11 +20,11 @@ const HomePage = () => {
     }, [setRole, navigate]);
 
     return (
-        <div className="w-full bg-gradient-to-b from-white to-blue-50 min-h-screen font-sans text-gray-800">
+        <div className="w-full bg-gradient-to-br from-blue-50 via-blue-100 to-white min-h-screen font-sans text-gray-800">
             {/* Hero Section */}
-            <section className="flex flex-col items-center justify-center text-center py-24 px-6">
+            <section className="flex flex-col items-center justify-center text-center py-32 px-6 bg-[url('/public/vite.svg')] bg-contain bg-no-repeat bg-center">
                 <h1 className="text-5xl sm:text-6xl font-bold mb-6">
-                    Welcome to <span className="text-blue-600">ClinicIQ</span>
+                    Find Your Doctor at <span className="text-blue-600">ClinicIQ</span>
                 </h1>
                 <p className="text-lg sm:text-xl max-w-2xl mb-10 text-gray-600">
                     Streamlining clinic visits — Book appointments, meet doctors, and skip the chaos.

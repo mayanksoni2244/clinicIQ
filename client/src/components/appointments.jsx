@@ -53,6 +53,9 @@ const DoctorAppointments = () => {
                 <p><strong>Patient:</strong> {appt.patient?.name || 'N/A'}</p>
                 <p><strong>Date:</strong> {new Date(appt.date).toLocaleDateString()}</p>
                 <p><strong>Time:</strong> {appt.timeSlot}</p>
+                {appt.tokenNumber && (
+                  <p><strong>Token #:</strong> {appt.tokenNumber}</p>
+                )}
                 <p><strong>Status:</strong> <span className={`font-semibold ${appt.status === 'pending' ? 'text-yellow-600' : appt.status === 'approved' ? 'text-green-600' : appt.status === 'rejected' ? 'text-red-600' : ''}`}>{appt.status}</span></p>
               </div>
               {appt.status === 'pending' && (
