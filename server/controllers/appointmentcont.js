@@ -77,10 +77,11 @@ export const cancelAppointment = async (req, res) => {
         .json({ message: "Unauthorized to cancel this appointment" });
     }
 
-    if (appointment.status === "cancelled") {
+    // Disallow cancellation if appointment has been approved or rejected
+    if (appointment.status !== "pending") {
       return res
         .status(400)
-        .json({ message: "Appointment is already cancelled" });
+        .json({ message: "Only pending appointments can be cancelled" });
     }
 
     appointment.status = "cancelled";

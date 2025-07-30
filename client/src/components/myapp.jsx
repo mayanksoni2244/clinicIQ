@@ -59,7 +59,7 @@ const MyAppointments = () => {
               <p><strong>Date:</strong> {new Date(appt.date).toLocaleDateString()}</p>
               <p><strong>Time:</strong> {appt.timeSlot}</p>
               <p><strong>Status:</strong> {appt.status || 'pending'}</p>
-              {appt.status !== 'cancelled' && (
+              {appt.status === 'pending' && (
                 <button
                   onClick={() => handleCancel(appt._id)}
                   className="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"

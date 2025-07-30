@@ -1,12 +1,14 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useRole } from "../context/Rolecontext";
+import API from "../api/api.js";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
   const { role, setRole } = useRole();
+  const [pendingCount, setPendingCount] = useState(0);
 
   useEffect(() => {
     // Update isLoggedIn and role on route change or storage change
@@ -23,6 +25,30 @@ const Navbar = () => {
     window.addEventListener("storage", checkLogin);
     return () => window.removeEventListener("storage", checkLogin);
   }, [location, setRole]);
+
+  // Fetch pending appointments count for doctors
+  useEffect(() => {
+    const fetchPending = async () => {
+      if (!isLoggedIn || role !== "doctor") return;
+      // Reset count when on appointments page (considered read)
+      if (location.pathname === "/appointments") {
+        setPendingCount(0);
+        return;
+      }
+      try {
+        const res = await API.get("/appointment/doctor", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+        const pending = Array.isArray(res.data)
+          ? res.data.filter((a) => a.status === "pending").length
+          : 0;
+        setPendingCount(pending);
+      } catch {
+        // ignore errors silently
+      }
+    };
+    fetchPending();
+  }, [isLoggedIn, role, location]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -49,8 +75,8 @@ const Navbar = () => {
         {isLoggedIn && role === "patient" && (
           <>
             <Link to="/myapp">My Appointments</Link>
+            <Link to="/book">Book</Link>
             <Link to="/profile">Profile</Link>
-            <Link to="/contact">Contact</Link>
             <button
               onClick={handleLogout}
               className="ml-4 px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-all"
@@ -63,7 +89,14 @@ const Navbar = () => {
         {isLoggedIn && role === "doctor" && (
           <>
             <Link to="/dashboard">Dashboard</Link>
-            <Link to="/appointments">Appointments</Link>
+            <Link to="/appointments" className="relative">
+              Appointments
+              {pendingCount > 0 && location.pathname !== "/appointments" && (
+                <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                  {pendingCount}
+                </span>
+              )}
+            </Link>
             <Link to="/history">History</Link>
             <button
               onClick={handleLogout}
