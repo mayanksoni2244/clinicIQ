@@ -15,6 +15,7 @@ import Profile from './components/profile.jsx';
 import Dashboard from './components/dashboard.jsx';
 import DoctorAppointments from './components/appointments.jsx';
 import DoctorHistory from './components/history.jsx';
+import WeeklyAvailability from './components/availability.jsx';
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/appointments" element={<DoctorAppointments />} />
           <Route path="/history" element={<DoctorHistory />} />
+          <Route path="/availability" element={<WeeklyAvailability />} />
         </Routes>
       </RoleProvider>
     </BrowserRouter>
