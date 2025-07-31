@@ -99,6 +99,7 @@ const Navbar = () => {
                 </span>
               )}
             </Link>
+            <Link to="/availability">Availability</Link>
             <Link to="/history">History</Link>
             <button
               onClick={handleLogout}
