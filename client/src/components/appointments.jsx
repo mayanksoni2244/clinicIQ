@@ -14,6 +14,8 @@ const DoctorAppointments = () => {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       setAppointments(res.data);
+      const pending = res.data.filter(a => a.status === 'pending').length;
+      window.dispatchEvent(new CustomEvent('pendingCountUpdated', { detail: pending }));
     } catch (err) {
       setError('Failed to load appointments');
     } finally {
@@ -30,7 +32,7 @@ const DoctorAppointments = () => {
       await API.put(`/appointment/status/${id}`, { status }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
-      fetchAppointments();
+      await fetchAppointments();
     } catch {
       alert('Failed to update status');
     }

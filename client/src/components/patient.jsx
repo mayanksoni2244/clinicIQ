@@ -1,38 +1,30 @@
 // Patient Home Page for a Personal Clinic
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaPhoneAlt, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
 import { MdOutlineEmail } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-
-const doctors = [
-    {
-        name: 'Dr. Priya Sharma',
-        specialization: 'MBBS, MD (General Medicine)',
-        experience: '10+ years',
-        description:
-            'Known for compassionate care and expert diagnosis in general medicine.',
-        image: '/doctor.png',
-    },
-    {
-        name: 'Dr. Rajeev Mehta',
-        specialization: 'MBBS, MS (Orthopedics)',
-        experience: '8+ years',
-        description:
-            'Specialist in bone and joint care, with a strong focus on sports injuries and arthritis.',
-        image: '/doctor2.png',
-    },
-    {
-        name: 'Dr. Ayesha Khan',
-        specialization: 'BDS, MDS (Dentistry)',
-        experience: '6+ years',
-        description:
-            'Dedicated to providing pain-free dental treatments and cosmetic dentistry.',
-        image: '/doctor3.png',
-    },
-];
+import API from '../api/api.js';
 
 const PatientHome = () => {
+    const [doctors, setDoctors] = useState([]);
+    const [loadingDoctors, setLoadingDoctors] = useState(true);
+
+    useEffect(() => {
+        const fetchDoctors = async () => {
+            setLoadingDoctors(true);
+            try {
+                const res = await API.get('/doctor/all');
+                setDoctors(res.data);
+            } catch {
+                setDoctors([]);
+            } finally {
+                setLoadingDoctors(false);
+            }
+        };
+        fetchDoctors();
+    }, []);
+
     return (
         <div className="w-full">
             {/* Hero Section */}
@@ -51,20 +43,26 @@ const PatientHome = () => {
             {/* Doctors Section */}
             <section className="py-16 px-6 bg-white max-w-6xl mx-auto">
                 <h2 className="text-3xl font-semibold text-blue-800 text-center mb-12">Meet Our Specialists</h2>
-                <div className="grid md:grid-cols-3 gap-10">
-                    {doctors.map((doc, index) => (
-                        <div key={index} className="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition">
-                            <img
-                                src={doc.image}
-                                alt={doc.name}
-                                className="w-full h-[250px] object-cover rounded-lg mb-4"
-                            />
-                            <h3 className="text-2xl font-semibold text-blue-700">{doc.name}</h3>
-                            <p className="text-sm text-gray-600">{doc.specialization} | {doc.experience}</p>
-                            <p className="mt-3 text-gray-700 text-[15px]">{doc.description}</p>
-                        </div>
-                    ))}
-                </div>
+                {loadingDoctors ? (
+                    <p className="text-center text-gray-600">Loading doctors...</p>
+                ) : doctors.length === 0 ? (
+                    <p className="text-center text-gray-600">No doctors available right now.</p>
+                ) : (
+                    <div className="grid md:grid-cols-3 gap-10">
+                        {doctors.map((doc) => (
+                            <div key={doc._id} className="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition">
+                                <img
+                                    src={'/doctor.png'}
+                                    alt={doc.name}
+                                    className="w-full h-[250px] object-cover rounded-lg mb-4"
+                                />
+                                <h3 className="text-2xl font-semibold text-blue-700">{doc.name}</h3>
+                                <p className="text-sm text-gray-600">{doc.specialization} | {doc.yearsExperience ? `${doc.yearsExperience}+ years` : ''}</p>
+                                {doc.testimonial && <p className="mt-3 text-gray-700 text-[15px]">{doc.testimonial}</p>}
+                            </div>
+                        ))}
+                    </div>
+                )}
                 <div className="mt-10 text-center">
                     <ul className="inline-block text-left space-y-2 text-gray-700">
                         <li className="flex items-center gap-2"><FaMapMarkerAlt className="text-blue-600" /> 123 Health Street, Indore, MP</li>

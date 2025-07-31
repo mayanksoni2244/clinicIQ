@@ -10,6 +10,8 @@ const DoctorSignup = () => {
     password: "",
     specialization: "",
     medicalId: "",
+    yearsExperience: "",
+    testimonial: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -23,6 +25,7 @@ const DoctorSignup = () => {
     try {
       const res = await API.post("/auth/register", {
         ...form,
+        yearsExperience: Number(form.yearsExperience),
         role: "doctor",
       });
       if (res.status === 201) {
@@ -79,10 +82,27 @@ const DoctorSignup = () => {
           <input
             type="text"
             name="medicalId"
-            placeholder="Medical id"
+            placeholder="Medical ID"
             required
             className="w-full border px-4 py-2 rounded"
             value={form.medicalId}
+            onChange={handleChange}
+          />
+          <input
+            type="number"
+            name="yearsExperience"
+            placeholder="Years of Experience"
+            required
+            className="w-full border px-4 py-2 rounded"
+            value={form.yearsExperience}
+            onChange={handleChange}
+          />
+          <textarea
+            name="testimonial"
+            placeholder="Short Bio / Testimonial"
+            className="w-full border px-4 py-2 rounded"
+            rows="3"
+            value={form.testimonial}
             onChange={handleChange}
           />
           <button type="submit" className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition" disabled={loading}>

@@ -30,7 +30,19 @@ const DoctorLogin = () => {
         setRole("doctor");
         localStorage.setItem("token", res.data.user.token);
         localStorage.setItem("userRole", "doctor");
-        navigate("/dashboard"); // or doctor dashboard route
+        localStorage.setItem("userId", res.data.user.id);
+
+        // Check availability
+        try {
+          await API.get(`/availability/${res.data.user.id}`, {
+            headers: { Authorization: `Bearer ${res.data.user.token}` }
+          });
+          // If availability exists, go to dashboard
+          navigate("/dashboard");
+        } catch (errAvail) {
+          // If no availability set (404), redirect to availability setup
+          navigate("/availability");
+        }
       } else {
         setError("Not a doctor account.");
       }
