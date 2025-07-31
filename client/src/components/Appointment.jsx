@@ -13,10 +13,30 @@ const BookAppointment = () => {
         symptoms: '',
     });
     const [doctors, setDoctors] = useState([]);
+    const [availableTimes, setAvailableTimes] = useState([]);
     useEffect(() => {
         // Fetch doctors from backend
         API.get('/doctor/all').then(res => setDoctors(res.data)).catch(() => setDoctors([]));
     }, []);
+
+    useEffect(() => {
+        const loadSlots = async () => {
+            if (formData.doctor && formData.date) {
+                try {
+                    const res = await API.get(`/availability/slots/${formData.doctor}`, {
+                        params: { date: formData.date }
+                    });
+                    setAvailableTimes(res.data.timeSlots || []);
+                    setFormData(prev => ({ ...prev, time: '' }));
+                } catch {
+                    setAvailableTimes([]);
+                }
+            } else {
+                setAvailableTimes([]);
+            }
+        };
+        loadSlots();
+    }, [formData.doctor, formData.date]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -112,15 +132,30 @@ const BookAppointment = () => {
 
                 {/* Time */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Time</label>
-                    <input
-                        type="time"
-                        name="time"
-                        required
-                        value={formData.time}
-                        onChange={handleChange}
-                        className="w-full border border-gray-300 rounded-md px-4 py-2"
-                    />
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Available Time Slots</label>
+                    {formData.date && formData.doctor ? (
+                        availableTimes.length > 0 ? (
+                            <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
+                                {availableTimes.map((slot) => (
+                                    <button
+                                        key={slot}
+                                        type="button"
+                                        onClick={() => setFormData({ ...formData, time: slot })}
+                                        className={`px-3 py-1 rounded text-sm border transition-all ${formData.time === slot ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-blue-50'}`}
+                                    >
+                                        {slot}
+                                    </button>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-red-500 text-sm">No available slots for selected date</p>
+                        )
+                    ) : (
+                        <p className="text-gray-500 text-sm italic">Select doctor and date first</p>
+                    )}
+                    {formData.time && (
+                        <p className="text-green-600 text-sm mt-2">✓ Selected: {formData.time}</p>
+                    )}
                 </div>
 
                 {/* Symptoms */}
