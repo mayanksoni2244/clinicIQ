@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import API from '../api/api.js';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({ total: 0, pending: 0, approved: 0, rejected: 0 });
@@ -67,6 +68,34 @@ const Dashboard = () => {
           </div>
         </div>
       )}
+      
+      {/* Quick Actions Section */}
+      <div className="bg-white rounded-xl p-6 shadow-md">
+        <h3 className="text-2xl font-semibold text-gray-800 mb-6">Quick Actions</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Link 
+            to="/availability" 
+            className="bg-green-600 hover:bg-green-700 text-white p-4 rounded-lg text-center transition-all shadow-md"
+          >
+            <div className="text-lg font-semibold">Manage Availability</div>
+            <div className="text-sm opacity-90">Set your working hours</div>
+          </Link>
+          <Link 
+            to="/appointments" 
+            className="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-lg text-center transition-all shadow-md"
+          >
+            <div className="text-lg font-semibold">View Appointments</div>
+            <div className="text-sm opacity-90">Check today's schedule</div>
+          </Link>
+          <Link 
+            to="/history" 
+            className="bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-lg text-center transition-all shadow-md"
+          >
+            <div className="text-lg font-semibold">Patient History</div>
+            <div className="text-sm opacity-90">Review past appointments</div>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };

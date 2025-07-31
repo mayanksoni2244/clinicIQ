@@ -64,6 +64,7 @@ const Navbar = () => {
           <>
             <Link to="/dashboard">Dashboard</Link>
             <Link to="/appointments">Appointments</Link>
+            <Link to="/availability">Availability</Link>
             <Link to="/history">History</Link>
             <button
               onClick={handleLogout}
