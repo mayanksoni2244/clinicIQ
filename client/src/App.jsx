@@ -3,7 +3,6 @@ import RoleSelector from './components/first.jsx'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Navbar from './components/Nav.jsx'
 import HomePage from './components/patient.jsx'
-import AppointmentSuccess from './components/rec.jsx'
 import BookAppointment from './components/Appointment.jsx'
 import MyAppointments from './components/myapp.jsx'
 import DoctorSignup from './components/Dsignup.jsx'
@@ -29,7 +28,6 @@ function App() {
           <Route path="/" element={<RoleSelector />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/book" element={<BookAppointment />} />
-          <Route path="/rec" element={<AppointmentSuccess />} />
           <Route path="/myapp" element={<MyAppointments />} />
           <Route path="/Dsignup" element={<DoctorSignup />} />
           <Route path="/Dlogin" element={<DoctorLogin />} />
