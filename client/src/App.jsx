@@ -40,8 +40,10 @@ function App() {
           <Route path="/appointments" element={<DoctorAppointments />} />
           <Route path="/history" element={<DoctorHistory />} />
           <Route path="/availability" element={<WeeklyAvailability />} />
+
           <Route path="/about" element={<AboutUs />} /> 
           <Route path="/contact" element={<Contact />} />
+
         </Routes>
       </RoleProvider>
     </BrowserRouter>
