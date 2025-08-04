@@ -12,8 +12,8 @@ const HomePage = () => {
         setRole(null);
         const token = localStorage.getItem("token");
         const role = localStorage.getItem("userRole");
-        if (token && role === "patient") navigate("/myapp");
-        else if (token && role === "doctor") navigate("/dashboard");
+        if (token && role === "patient") navigate("/home");
+        if (token && role === "doctor") navigate("/dashboard");
     }, [setRole, navigate]);
 
     const fadeIn = {
