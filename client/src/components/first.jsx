@@ -13,7 +13,7 @@ const HomePage = () => {
         const token = localStorage.getItem("token");
         const role = localStorage.getItem("userRole");
         if (token && role === "patient") {
-            navigate("/myapp");
+            navigate("/home");
         } else if (token && role === "doctor") {
             navigate("/dashboard");
         }

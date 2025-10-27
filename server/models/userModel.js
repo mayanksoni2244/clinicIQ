@@ -28,6 +28,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: function() { return this.role === 'doctor'; },
   },
+  yearsExperience: {
+    type: Number,
+    required: function() { return this.role === 'doctor'; },
+  },
+  testimonial: {
+    type: String,
+    required: false,
+    trim: true,
+  },
 });
 
 export const User = mongoose.model("User", userSchema);

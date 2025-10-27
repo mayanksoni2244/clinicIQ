@@ -1,134 +1,157 @@
-// Patient Home Page for a Personal Clinic
+import React, { useEffect } from "react";
+import { FaUserMd, FaUserAlt } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { useRole } from "../context/Rolecontext";
+import { motion } from "framer-motion";
 
-import React from 'react';
-import { FaPhoneAlt, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
-import { MdOutlineEmail } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+const HomePage = () => {
+    const { setRole } = useRole();
+    const navigate = useNavigate();
 
-const doctors = [
-    {
-        name: 'Dr. Priya Sharma',
-        specialization: 'MBBS, MD (General Medicine)',
-        experience: '10+ years',
-        description:
-            'Known for compassionate care and expert diagnosis in general medicine.',
-        image: '/doctor.png',
-    },
-    {
-        name: 'Dr. Rajeev Mehta',
-        specialization: 'MBBS, MS (Orthopedics)',
-        experience: '8+ years',
-        description:
-            'Specialist in bone and joint care, with a strong focus on sports injuries and arthritis.',
-        image: '/doctor2.png',
-    },
-    {
-        name: 'Dr. Ayesha Khan',
-        specialization: 'BDS, MDS (Dentistry)',
-        experience: '6+ years',
-        description:
-            'Dedicated to providing pain-free dental treatments and cosmetic dentistry.',
-        image: '/doctor3.png',
-    },
-];
+    useEffect(() => {
+        setRole(null);
+        const token = localStorage.getItem("token");
+        const role = localStorage.getItem("userRole");
+        if (token && role === "patient") navigate("/home");
+        if (token && role === "doctor") navigate("/dashboard");
+    }, [setRole, navigate]);
 
-const PatientHome = () => {
+    const fadeIn = {
+        hidden: { opacity: 0, y: 40 },
+        show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+    };
+
     return (
-        <div className="w-full">
+        <div className="w-full bg-gradient-to-b from-white to-blue-50 min-h-screen font-sans text-gray-800">
             {/* Hero Section */}
-            <section className="bg-gradient-to-br from-blue-100 to-blue-50 py-20 px-6 text-center">
-                <h1 className="text-4xl md:text-5xl font-bold text-blue-800">Your Health, Our Priority</h1>
-                <p className="mt-4 text-lg text-gray-700 max-w-xl mx-auto">
-                    Welcome to <span className="font-semibold">ClinicIQ</span> — A modern clinic for quality care. Book appointments with ease.
-                </p>
-                <Link to="/book">
-                    <button className="mt-6 cursor-pointer px-6 py-3 text-lg bg-blue-600 hover:bg-blue-700 text-white rounded-xl">
-                        Book Appointment
-                    </button>
-                </Link>
+            <section className="flex flex-col items-center justify-center text-center py-20 px-6 md:px-12">
+                <motion.h1
+                    variants={fadeIn}
+                    initial="hidden"
+                    animate="show"
+                    className="text-4xl md:text-6xl font-bold mb-4"
+                >
+                    Welcome to <span className="text-blue-600">ClinicIQ</span>
+                </motion.h1>
+                <motion.p
+                    variants={fadeIn}
+                    initial="hidden"
+                    animate="show"
+                    className="text-lg md:text-xl max-w-xl mb-10 text-gray-600"
+                >
+                    Streamlining clinic visits — Book appointments, meet doctors, and skip the chaos.
+                </motion.p>
+                <motion.div
+                    variants={fadeIn}
+                    initial="hidden"
+                    animate="show"
+                    className="flex gap-4 flex-wrap justify-center"
+                >
+                    <Link to='/patientSignup'>
+                        <button onClick={() => setRole("patient")} className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md transition-transform duration-300 hover:scale-105 text-base md:text-lg">
+                            <FaUserAlt /> I’m a Patient
+                        </button>
+                    </Link>
+                    <Link to='/Dlogin'>
+                        <button onClick={() => setRole("doctor")} className="flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl shadow-md transition-transform duration-300 hover:scale-105 text-base md:text-lg">
+                            <FaUserMd /> I’m a Doctor
+                        </button>
+                    </Link>
+                </motion.div>
             </section>
 
-            {/* Doctors Section */}
-            <section className="py-16 px-6 bg-white max-w-6xl mx-auto">
-                <h2 className="text-3xl font-semibold text-blue-800 text-center mb-12">Meet Our Specialists</h2>
-                <div className="grid md:grid-cols-3 gap-10">
-                    {doctors.map((doc, index) => (
-                        <div key={index} className="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition">
-                            <img
-                                src={doc.image}
-                                alt={doc.name}
-                                className="w-full h-[250px] object-cover rounded-lg mb-4"
-                            />
-                            <h3 className="text-2xl font-semibold text-blue-700">{doc.name}</h3>
-                            <p className="text-sm text-gray-600">{doc.specialization} | {doc.experience}</p>
-                            <p className="mt-3 text-gray-700 text-[15px]">{doc.description}</p>
+            {/* Why ClinicIQ Section */}
+            <section className="py-16 px-6 text-center bg-white">
+                <motion.h2
+                    variants={fadeIn}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true }}
+                    className="text-3xl md:text-4xl font-bold mb-4"
+                >
+                    Why <span className="text-blue-600">ClinicIQ?</span>
+                </motion.h2>
+                <motion.p
+                    variants={fadeIn}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true }}
+                    className="text-gray-600 text-base md:text-lg max-w-3xl mx-auto"
+                >
+                    ClinicIQ is built specifically for individual clinics — helping doctors manage appointments better and making the entire experience seamless for patients. No complex systems. No long queues. Just smarter care.
+                </motion.p>
+            </section>
+
+            {/* Features Grid */}
+            <section className="py-14 px-6 grid md:grid-cols-2 gap-10 bg-blue-50">
+                <motion.div
+                    variants={fadeIn}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true }}
+                    className="bg-white rounded-2xl shadow-xl p-6 md:p-8 hover:shadow-2xl transition-shadow"
+                >
+                    <h3 className="text-2xl font-bold text-blue-600 mb-4">For Patients</h3>
+                    <ul className="text-gray-700 space-y-2 text-sm md:text-base">
+                        <li>✓ Instantly book available slots</li>
+                        <li>✓ Track your upcoming appointments</li>
+                        <li>✓ Reschedule or cancel easily</li>
+                        <li>✓ No more long waiting hours</li>
+                    </ul>
+                </motion.div>
+
+                <motion.div
+                    variants={fadeIn}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true }}
+                    className="bg-white rounded-2xl shadow-xl p-6 md:p-8 hover:shadow-2xl transition-shadow"
+                >
+                    <h3 className="text-2xl font-bold text-green-600 mb-4">For Doctors</h3>
+                    <ul className="text-gray-700 space-y-2 text-sm md:text-base">
+                        <li>✓ Real-time appointment dashboard</li>
+                        <li>✓ Manage multiple patient schedules</li>
+                        <li>✓ Get appointment insights and history</li>
+                        <li>✓ Focus more on care, less on admin</li>
+                    </ul>
+                </motion.div>
+            </section>
+
+            {/* Testimonials */}
+            <section className="py-16 bg-white">
+                <h2 className="text-center text-3xl font-bold mb-8 text-gray-800">What Our Doctors Say</h2>
+                <motion.div
+                    className="flex space-x-6 overflow-x-auto px-4 no-scrollbar"
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true }}
+                    variants={fadeIn}
+                >
+                    {[...Array(5)].map((_, idx) => (
+                        <div key={idx} className="min-w-[260px] bg-blue-100 text-blue-900 p-6 rounded-xl shadow-md">
+                            <p className="text-sm">
+                                “ClinicIQ has simplified how I manage appointments. It feels like I finally have time to breathe between patients.”
+                            </p>
+                            <p className="mt-4 font-semibold text-sm">— Dr. Anjali Sharma</p>
                         </div>
                     ))}
-                </div>
-                <div className="mt-10 text-center">
-                    <ul className="inline-block text-left space-y-2 text-gray-700">
-                        <li className="flex items-center gap-2"><FaMapMarkerAlt className="text-blue-600" /> 123 Health Street, Indore, MP</li>
-                        <li className="flex items-center gap-2"><FaClock className="text-blue-600" /> Mon - Sat: 9AM – 2PM, 5PM – 9PM</li>
-                        <li className="flex items-center gap-2"><FaPhoneAlt className="text-blue-600" /> +91 9876543210</li>
-                        <li className="flex items-center gap-2"><MdOutlineEmail className="text-blue-600" /> clinic@example.com</li>
-                    </ul>
-                </div>
+                </motion.div>
             </section>
 
-            {/* Appointment Booking CTA */}
-            <section className="bg-blue-50 py-16 px-6 text-center">
-                <h2 className="text-3xl font-semibold text-blue-700">Book Your Appointment Now</h2>
-                <p className="mt-2 text-gray-600">Easy booking. Trusted care. Instant confirmation.</p>
-                <Link to="/book">
-                    <button className="mt-6 px-6 py-3 text-lg bg-blue-600 hover:bg-blue-700 text-white rounded-xl">
-                        Book Now
-                    </button>
-                </Link>
-                
-                {/* About Us Section */}
-
+            {/* Contact Us Section */}
+            <section className="bg-blue-600 text-white text-center py-10 px-6">
+                <h2 className="text-2xl md:text-3xl font-bold mb-3">Contact Us</h2>
+                <p className="text-sm md:text-base mb-2">WhatsApp: <a href="https://wa.me/917014394094" className="underline">+91 7014394094</a></p>
+                <p className="text-sm md:text-base mb-2">Instagram: <a href="https://instagram.com/cliniq_official" className="underline">@cliniq_official</a></p>
+                <p className="text-sm md:text-base">Email: <a href="mailto:support@cliniq.in" className="underline">support@cliniq.in</a></p>
             </section>
-                <main className="bg-white py-20 px-6 max-w-5xl mx-auto text-center">
-                    <h2 className="text-4xl font-bold text-blue-800 mb-6">About ClinicIQ</h2>
-                    <p className="text-gray-700 text-lg leading-relaxed max-w-3xl mx-auto">
-                        At <span className="font-semibold text-blue-700">ClinicIQ</span>, we believe healthcare should be
-                        <span className="font-medium"> simple, compassionate, and accessible</span>.
-                        We are a modern personal clinic that combines experienced doctors, state-of-the-art facilities, and a patient-first approach.
-                    </p>
 
-                    <div className="mt-12 grid md:grid-cols-3 gap-10 text-left">
-                        <div className="bg-blue-50 p-6 rounded-xl shadow">
-                            <h3 className="text-xl font-semibold text-blue-700 mb-2">🔬 Expert Care</h3>
-                            <p className="text-gray-600 text-sm">
-                                Our team includes seasoned specialists across general medicine, orthopedics, and dental care — ensuring every patient gets focused, quality treatment.
-                            </p>
-                        </div>
-                        <div className="bg-blue-50 p-6 rounded-xl shadow">
-                            <h3 className="text-xl font-semibold text-blue-700 mb-2">💡 Smart Appointments</h3>
-                            <p className="text-gray-600 text-sm">
-                                With our intuitive booking system, say goodbye to long queues. Book online, reschedule, or cancel with ease. Your time matters to us.
-                            </p>
-                        </div>
-                        <div className="bg-blue-50 p-6 rounded-xl shadow">
-                            <h3 className="text-xl font-semibold text-blue-700 mb-2">❤️ Patient-First Philosophy</h3>
-                            <p className="text-gray-600 text-sm">
-                                We listen, we care, we treat. Every patient is treated with empathy, privacy, and utmost respect. Because healing begins with trust.
-                            </p>
-                        </div>
-                    </div>
-
-                    <p className="mt-12 text-gray-600 text-sm max-w-2xl mx-auto">
-                        Whether you're here for a regular check-up or specialized care, ClinicIQ ensures a smooth, stress-free healthcare experience for you and your family.
-                    </p>
-                </main>
-
-            {/* Contact Footer */}
-            <footer className="bg-blue-900 text-white py-8 px-6 text-center">
-                <p>© 2025 ClinicIQ. All rights reserved.</p>
-                <p className="text-sm mt-1">123 Health Street, Indore, MP · +91 9876543210</p>
+            {/* Footer */}
+            <footer className="py-6 bg-gray-900 text-white text-center text-sm">
+                © 2025 ClinicIQ. All rights reserved.
             </footer>
         </div>
     );
 };
 
-export default PatientHome;
+export default HomePage;

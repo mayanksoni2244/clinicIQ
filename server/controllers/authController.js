@@ -4,7 +4,7 @@ import { User } from "../models/userModel.js";
 import { generateToken } from "../utils/generatetoken.js";
 
 export const register = async (req, res) => {
-  const { name, email, password, role, specialization, medicalId } = req.body;
+  const { name, email, password, role, specialization, medicalId, yearsExperience, testimonial } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -23,7 +23,7 @@ export const register = async (req, res) => {
       email,
       password: hashedPassword,
       role,
-      ...(role === "doctor" ? { specialization, medicalId } : {}),
+      ...(role === "doctor" ? { specialization, medicalId, yearsExperience, testimonial } : {}),
     });
     await newUser.save();
 
@@ -38,6 +38,8 @@ export const register = async (req, res) => {
         role: newUser.role,
         specialization: newUser.specialization,
         medicalId: newUser.medicalId,
+        yearsExperience: newUser.yearsExperience,
+        testimonial: newUser.testimonial,
         token,
       },
     });
@@ -67,6 +69,9 @@ export const login = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        specialization: user.specialization,
+        yearsExperience: user.yearsExperience,
+        testimonial: user.testimonial,
         token,
       },
     });

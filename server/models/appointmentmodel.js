@@ -23,7 +23,14 @@ const appointmentSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "confirmed", "completed", "cancelled"],
+      enum: [
+        "pending",
+        "approved",  // doctor accepted appointment
+        "rejected",  // doctor declined appointment
+        "confirmed", // legacy synonym, keep if used elsewhere
+        "completed",
+        "cancelled",
+      ],
       default: "pending",
     },
   },

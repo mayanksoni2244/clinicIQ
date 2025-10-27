@@ -7,6 +7,7 @@ const Navbar = () => {
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
   const { role, setRole } = useRole();
+  const [pendingCount, setPendingCount] = useState(0);
 
   useEffect(() => {
     // Update isLoggedIn and role on route change or storage change
@@ -23,6 +24,33 @@ const Navbar = () => {
     window.addEventListener("storage", checkLogin);
     return () => window.removeEventListener("storage", checkLogin);
   }, [location, setRole]);
+
+  // Fetch pending appointments count for doctor
+  useEffect(() => {
+    const fetchPending = async () => {
+      if (role === "doctor" && isLoggedIn) {
+        try {
+          const res = await (await import("../api/api.js")).default.get('/appointment/doctor', {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+          });
+          const pending = res.data.filter(a => a.status === 'pending').length;
+          setPendingCount(pending);
+        } catch {
+          setPendingCount(0);
+        }
+      } else {
+        setPendingCount(0);
+      }
+    };
+
+    fetchPending();
+
+    const handler = (e) => {
+      if (typeof e.detail === 'number') setPendingCount(e.detail);
+    };
+    window.addEventListener('pendingCountUpdated', handler);
+    return () => window.removeEventListener('pendingCountUpdated', handler);
+  }, [role, isLoggedIn, location]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -63,7 +91,15 @@ const Navbar = () => {
         {isLoggedIn && role === "doctor" && (
           <>
             <Link to="/dashboard">Dashboard</Link>
-            <Link to="/appointments">Appointments</Link>
+            <Link to="/appointments" className="relative">
+              Appointments
+              {pendingCount > 0 && (
+                <span className="absolute -top-2 -right-3 bg-red-600 text-white rounded-full h-5 w-5 text-xs flex items-center justify-center">
+                  {pendingCount}
+                </span>
+              )}
+            </Link>
+            <Link to="/availability">Availability</Link>
             <Link to="/history">History</Link>
             <button
               onClick={handleLogout}
