@@ -1,38 +1,48 @@
 // Patient Home Page for a Personal Clinic
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaPhoneAlt, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
 import { MdOutlineEmail } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import API from '../api/api.js';
 
-const doctors = [
-    {
-        name: 'Dr. Priya Sharma',
-        specialization: 'MBBS, MD (General Medicine)',
-        experience: '10+ years',
-        description:
-            'Known for compassionate care and expert diagnosis in general medicine.',
-        image: '/doctor.png',
-    },
-    {
-        name: 'Dr. Rajeev Mehta',
-        specialization: 'MBBS, MS (Orthopedics)',
-        experience: '8+ years',
-        description:
-            'Specialist in bone and joint care, with a strong focus on sports injuries and arthritis.',
-        image: '/doctor2.png',
-    },
-    {
-        name: 'Dr. Ayesha Khan',
-        specialization: 'BDS, MDS (Dentistry)',
-        experience: '6+ years',
-        description:
-            'Dedicated to providing pain-free dental treatments and cosmetic dentistry.',
-        image: '/doctor3.png',
-    },
+const placeholderDoctors = [
+  {
+    name: 'Dr. Priya Sharma',
+    specialization: 'General Medicine',
+    testimonial: 'Dr. Sharma is known for compassionate care and expert diagnosis.',
+    image: '/doctor.png',
+  },
+  {
+    name: 'Dr. Rajeev Mehta',
+    specialization: 'Orthopedics',
+    testimonial: 'Focused on sports injuries and arthritis treatments.',
+    image: '/doctor2.png',
+  },
+  {
+    name: 'Dr. Ayesha Khan',
+    specialization: 'Dentistry',
+    testimonial: 'Expert in pain-free dental and cosmetic dentistry.',
+    image: '/doctor3.png',
+  },
 ];
 
 const PatientHome = () => {
+    const [doctors, setDoctors] = useState([]);
+
+    useEffect(() => {
+        const fetchDoctors = async () => {
+            try {
+                const res = await API.get('/doctor/all');
+                setDoctors(res.data);
+            } catch {
+                // fallback to placeholders on error
+                setDoctors(placeholderDoctors);
+            }
+        };
+        fetchDoctors();
+    }, []);
+
     return (
         <div className="w-full">
             {/* Hero Section */}
@@ -60,8 +70,12 @@ const PatientHome = () => {
                                 className="w-full h-[250px] object-cover rounded-lg mb-4"
                             />
                             <h3 className="text-2xl font-semibold text-blue-700">{doc.name}</h3>
-                            <p className="text-sm text-gray-600">{doc.specialization} | {doc.experience}</p>
-                            <p className="mt-3 text-gray-700 text-[15px]">{doc.description}</p>
+                            {doc.specialization && (
+                                  <p className="text-sm text-gray-600">{doc.specialization}</p>
+                                )}
+                                {doc.testimonial && (
+                                  <p className="mt-3 text-gray-700 text-[15px]">{doc.testimonial}</p>
+                                )}
                         </div>
                     ))}
                 </div>

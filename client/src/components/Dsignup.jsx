@@ -10,6 +10,10 @@ const DoctorSignup = () => {
     password: "",
     specialization: "",
     medicalId: "",
+    experienceYears: "",
+    degree: "",
+    availableStart: "",
+    availableEnd: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -23,6 +27,9 @@ const DoctorSignup = () => {
     try {
       const res = await API.post("/auth/register", {
         ...form,
+        experienceYears: Number(form.experienceYears),
+        availableStart: form.availableStart,
+        availableEnd: form.availableEnd,
         role: "doctor",
       });
       if (res.status === 201) {
@@ -83,6 +90,42 @@ const DoctorSignup = () => {
             required
             className="w-full border px-4 py-2 rounded"
             value={form.medicalId}
+            onChange={handleChange}
+          />
+          <input
+            type="number"
+            name="experienceYears"
+            placeholder="Years of Experience"
+            required
+            className="w-full border px-4 py-2 rounded"
+            value={form.experienceYears}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="degree"
+            placeholder="Highest Degree (e.g., MBBS, MD)"
+            required
+            className="w-full border px-4 py-2 rounded"
+            value={form.degree}
+            onChange={handleChange}
+          />
+          <input
+            type="time"
+            name="availableStart"
+            placeholder="Clinic Start Time"
+            required
+            className="w-full border px-4 py-2 rounded"
+            value={form.availableStart}
+            onChange={handleChange}
+          />
+          <input
+            type="time"
+            name="availableEnd"
+            placeholder="Clinic End Time"
+            required
+            className="w-full border px-4 py-2 rounded"
+            value={form.availableEnd}
             onChange={handleChange}
           />
           <button type="submit" className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition" disabled={loading}>
